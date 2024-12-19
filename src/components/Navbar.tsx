@@ -1,13 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { MoonIcon, SunIcon, ChevronDown } from "lucide-react";
 import { useTheme } from "next-themes";
-import { motion } from "framer-motion";
+
+const menuItems = [
+  {
+    title: "Features",
+    items: ["AI Responses", "Automation", "Analytics", "Integration"],
+  },
+  {
+    title: "Pricing",
+    items: ["Starter", "Pro", "Enterprise"],
+  },
+  {
+    title: "About",
+    items: ["Our Story", "Team", "Careers", "Press"],
+  },
+];
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
   // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -26,19 +44,46 @@ const Navbar = () => {
               </motion.span>
             </Link>
             <div className="hidden md:ml-6 md:flex md:space-x-8">
-              {["Features", "Pricing", "About"].map((item) => (
-                <motion.div
-                  key={item}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+              {menuItems.map((item) => (
+                <div
+                  key={item.title}
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(item.title)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
-                  <Link
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 px-3 py-2 rounded-md text-sm font-medium"
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
                   >
-                    {item}
-                  </Link>
-                </motion.div>
+                    {item.title}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </motion.div>
+                  <AnimatePresence>
+                    {hoveredItem === item.title && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-hidden"
+                      >
+                        <div className="py-1">
+                          {item.items.map((subItem) => (
+                            <Link
+                              key={subItem}
+                              href={`#${subItem
+                                .toLowerCase()
+                                .replace(" ", "-")}`}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                              {subItem}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ))}
             </div>
           </div>
