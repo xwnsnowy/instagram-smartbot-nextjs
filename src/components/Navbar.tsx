@@ -90,7 +90,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button variant="outline" className="mr-2">
-                Log in
+                <Link href="/sign-in">Log In</Link>
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
