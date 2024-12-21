@@ -22,7 +22,7 @@ const menuItems = [
   },
 ];
 
-const Navbar = () => {
+const Header = () => {
   const { theme, setTheme } = useTheme();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
@@ -116,4 +116,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;

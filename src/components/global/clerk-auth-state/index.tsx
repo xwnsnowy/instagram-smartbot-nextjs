@@ -14,9 +14,7 @@ const ClerkAuthState = () => {
   return (
     <>
       <ClerkLoading>
-        <Loader state>
-          <></>
-        </Loader>
+        <Loader state />
       </ClerkLoading>
       <SignedOut>
         <SignInButton>

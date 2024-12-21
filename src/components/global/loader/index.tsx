@@ -5,11 +5,10 @@ import React from "react";
 type Props = {
   state: boolean;
   classname?: string;
-  children?: React.ReactNode;
   color?: string;
 };
 
-const Loader = ({ state, classname, children, color }: Props) => {
+const Loader = ({ state, classname, color }: Props) => {
   return state ? (
     <div className={cn(classname)}>
       <Spinner color={color} />

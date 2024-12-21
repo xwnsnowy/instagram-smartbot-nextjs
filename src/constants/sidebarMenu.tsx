@@ -18,7 +18,7 @@ type SideBarProps = {
 export const SIDEBAR_MENU: SideBarProps[] = [
   {
     id: uuid(),
-    label: "home",
+    label: "home",  
     icon: <HomeDuoToneWhite />,
   },
   {
