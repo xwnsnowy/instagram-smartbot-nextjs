@@ -1,11 +1,13 @@
 import React from "react";
+import { SignOutButton } from "@clerk/nextjs";
 
-type Props = {};
-
-const Page = async (props: Props) => {
-  //WIP: Server Action Onboard the user
-  //WIP: 200 || 201
-  return <div></div>;
+const Page = async () => {
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <SignOutButton />
+    </div>
+  );
 };
 
 export default Page;

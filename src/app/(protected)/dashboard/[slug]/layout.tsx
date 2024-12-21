@@ -1,3 +1,4 @@
+import Sidebar from "@/components/global/sidebar";
 import React from "react";
 
 type Props = {
@@ -5,10 +6,13 @@ type Props = {
   params: { slug: string };
 };
 
-const layout = ({ children, params }: Props) => {
-
-  //Query
-  return <div>layout</div>;
+const Layout = ({ children, params }: Props) => {
+  // Query
+  return (
+    <div className="p-3">
+      <Sidebar slug={params.slug} />
+    </div>
+  );
 };
 
-export default layout;
+export default Layout;
