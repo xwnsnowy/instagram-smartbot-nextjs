@@ -2,7 +2,7 @@
 
 import MainBreadCrumb from "@/components/global/bread-crumbs/main-bread-crumb";
 import CreateAutomation from "@/components/global/create-automation";
-import { Notifications } from "@/components/global/infobar/notifications";
+import { Notifications } from "@/components/global/infobar/notification";
 import Search from "@/components/global/infobar/search";
 import SheetCustom from "@/components/global/sheet-custom";
 import SidebarContent from "@/components/global/sidebar/SidebarContent";
@@ -33,7 +33,10 @@ const InfoBar = ({ slug }: Props) => {
           <CreateAutomation />
           <Notifications />
         </div>
-        <MainBreadCrumb page={page === slug ? "Home" : page} slug={slug} />
+        <MainBreadCrumb
+          currentPage={page === slug ? "Home" : page}
+          slug={slug}
+        />
       </div>
     )
   );
