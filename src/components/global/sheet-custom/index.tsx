@@ -15,7 +15,7 @@ type Props = {
   side: "left" | "right";
 };
 
-const Sheet = ({ children, trigger, className, side }: Props) => {
+const SheetCustom = ({ children, trigger, className, side }: Props) => {
   return (
     <ShadcnSheet>
       <VisuallyHidden>
@@ -29,4 +29,4 @@ const Sheet = ({ children, trigger, className, side }: Props) => {
   );
 };
 
-export default Sheet;
+export default SheetCustom;
