@@ -1,4 +1,4 @@
-import PaymentButton from "@/components/global/payment-button";
+import PaymentButton from "@/components/global/button-custom/PaymentButton";
 import React from "react";
 
 const UpgradeCard = () => {
