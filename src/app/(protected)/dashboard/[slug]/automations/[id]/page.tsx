@@ -1,9 +1,23 @@
+import AutomationsBreadCrumb from "@/components/global/bread-crumbs/automations";
+import Trigger from "@/components/global/bread-crumbs/automations/trigger";
+import { Warning } from "@/icons";
 import React from "react";
 
-const Page = () => {
+type Props = {
+  params: { id: string };
+};
+
+const Page = ({ params }: Props) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-6 gap-5">
-      <div className="lg:col-span-4">Automate List</div>
+    <div className="flex flex-col items-center gap-y-20">
+      <AutomationsBreadCrumb id={params.id} />
+      <div className="w-full lg:w-10/12 xl:w-6/12 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3">
+        <div className="flex gap-x-2">
+          <Warning />
+          When...
+        </div>
+        <Trigger id={params.id} />
+      </div>
     </div>
   );
 };
