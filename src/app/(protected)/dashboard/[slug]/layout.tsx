@@ -1,6 +1,5 @@
 import {
   dehydrate,
-  DehydratedState,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
@@ -12,23 +11,28 @@ import { prefetchUserData } from "@/react-query/prefetch";
 type Props = {
   children: React.ReactNode;
   params: { slug: string };
-  dehydratedState: DehydratedState;
 };
 
-export const getStaticProps = async () => {
+// export const getStaticProps = async () => {
+//   const queryClient = new QueryClient();
+//Hàm prefetchUserData được gọi với queryClient để prefetch dữ liệu. Điều này giúp chuẩn bị dữ liệu trước khi trang được render.
+// await prefetchUserData(queryClient);
+// const dehydratedState = dehydrate(queryClient);
+// return {
+//   props: {
+//Sử dụng dehydrate từ React Query để biến đổi trạng thái hiện tại của query client thành định dạng có thể truyền qua props. Điều này giúp truyền dữ liệu đã được prefetch về phía client.
+//       dehydratedState: dehydratedState,
+//     },
+//   };
+// };
+
+const Layout: React.FC<Props> = async ({ children, params }) => {
   const queryClient = new QueryClient();
-  //Hàm prefetchUserData được gọi với queryClient để prefetch dữ liệu. Điều này giúp chuẩn bị dữ liệu trước khi trang được render.
-  await prefetchUserData(queryClient);
-  const dehydratedState = dehydrate(queryClient);
-  return {
-    props: {
-      //Sử dụng dehydrate từ React Query để biến đổi trạng thái hiện tại của query client thành định dạng có thể truyền qua props. Điều này giúp truyền dữ liệu đã được prefetch về phía client.
-      dehydratedState: dehydratedState,
-    },
-  };
-};
 
-const Layout: React.FC<Props> = ({ children, params, dehydratedState }) => {
+  await prefetchUserData(queryClient);
+
+  const dehydratedState = dehydrate(queryClient);
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <div className="p-3">
