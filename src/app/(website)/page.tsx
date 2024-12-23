@@ -1,6 +1,6 @@
-import Hero from "@/components/Hero";
-import Pricing from "@/components/Pricing";
-import Header from "@/components/Header";
+import Hero from "@/components/global/Hero";
+import Pricing from "@/components/global/Pricing";
+import Header from "@/components/global/Header";
 
 export default function Home() {
   return (

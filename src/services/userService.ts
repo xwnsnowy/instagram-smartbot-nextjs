@@ -1,3 +1,5 @@
+"use server";
+
 import { updateIntegration } from "@/actions/integrations"
 import { createUser, findUser } from "@/actions/users"
 import { refreshToken } from "@/lib/fetch"
@@ -8,7 +10,7 @@ export const onCurrentUser = async () => {
   const user = await currentUser();
   if (!user) return redirect('/sign-in');
 
-  return user
+  return user;
 }
 
 export const onBoardUser = async () => {
@@ -65,9 +67,24 @@ export const onBoardUser = async () => {
       data: newUser,
     };
   } catch (error) {
-    console.error("Lỗi trong quá trình onboarding:", error, {
+    console.error("onBoarding error:", error, {
       user,
     });
     return { status: 500, message: "Internal Server Error" };
   }
 };
+
+export const onUserInfo = async () => {
+  const user = await onCurrentUser();
+  try {
+    const profile = await findUser(user.id);
+    if (profile) return { status: 200, data: profile }
+
+    return { status: 404 };
+  } catch (error) {
+    console.error("onUserInfo error:", error, {
+      user,
+    });
+    return { status: 500, message: "Internal Server Error" };
+  }
+}

@@ -10,10 +10,6 @@ const Page = async () => {
       lastname: string;
     };
 
-    if (!firstname || !lastname) {
-      return redirect("/sign-in");
-    }
-
     const encodedFirstName = removeAccents(firstname);
     const encodedLastName = removeAccents(lastname);
     return redirect(`/dashboard/${encodedFirstName}${encodedLastName}`);
