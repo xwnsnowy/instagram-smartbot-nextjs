@@ -6,7 +6,7 @@ import { refreshToken } from "@/lib/fetch"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 
-export const onCurrentUser = async () => {
+export const getCurrentUser = async () => {
   const user = await currentUser();
   if (!user) return redirect('/sign-in');
 
@@ -14,7 +14,7 @@ export const onCurrentUser = async () => {
 }
 
 export const onBoardUser = async () => {
-  const user = await onCurrentUser();
+  const user = await getCurrentUser();
 
   try {
     const foundUser = await findUser(user.id);
@@ -75,7 +75,7 @@ export const onBoardUser = async () => {
 };
 
 export const onUserInfo = async () => {
-  const user = await onCurrentUser();
+  const user = await getCurrentUser();
   try {
     const profile = await findUser(user.id);
     if (profile) return { status: 200, data: profile }
