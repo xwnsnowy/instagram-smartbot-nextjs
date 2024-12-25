@@ -2,16 +2,30 @@
 import GradientButton from "@/components/global/button-custom/GradientButton";
 import CreateAutomation from "@/components/global/create-automation";
 import { Button } from "@/components/ui/button";
+import { useMutationDataState } from "@/hooks/use-mutation-data";
 import { usePaths } from "@/hooks/use-paths";
 import { useQueryAutomations } from "@/hooks/use-queries";
 import { cn, getMonth } from "@/lib/utils";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 
 const AutomationList = () => {
   const { data } = useQueryAutomations();
 
+  const { lastestVariable } = useMutationDataState(["create-automation"]);
+
+  console.log(lastestVariable);
+
   const { pathname } = usePaths();
+
+  //Khi một mutation (hoạt động tạo mới một tự động hóa) diễn ra, giao diện người dùng sẽ được cập nhật ngay lập tức với dữ liệu mới nhất từ mutation đó, ngay cả khi dữ liệu này chưa thực sự được xác nhận từ server
+  const optimisticUiData = useMemo(() => {
+    if (lastestVariable && lastestVariable?.variables && data) {
+      const test = [lastestVariable.variables, ...data.data];
+      return { data: test };
+    }
+    return data || { data: [] };
+  }, [lastestVariable, data]);
 
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
@@ -24,7 +38,7 @@ const AutomationList = () => {
 
   return (
     <div className="flex flex-col gap-y-3">
-      {data.data.map((automation) => (
+      {optimisticUiData.data.map((automation) => (
         <Link
           href={`${pathname}/${automation.id}`}
           className="bg-[#1D1D1D] hover:opacity-80 transition duration-100 rounded-xl p-5 border-[1px] radial--gradient--automations flex border-[#545454]"
@@ -60,13 +74,14 @@ const AutomationList = () => {
             )}
           </div>
           <div className="flex flex-col justify-between">
-            <p className="capitalize text-sm font-light text=[#9B9CA0]">
+            <p className="capitalize text-sm font-light text-[#9B9CA0]">
               {getMonth(automation.createdAt.getUTCMonth() + 1)}{" "}
               {automation.createdAt.getUTCDate() === 1
                 ? `${automation.createdAt.getUTCDate()}st`
                 : `${automation.createdAt.getUTCDate()}th`}{" "}
               {automation.createdAt.getUTCFullYear()}
             </p>
+
             {automation.listener?.listener === "SMARTAI" ? (
               <GradientButton
                 type="BUTTON"

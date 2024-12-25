@@ -13,6 +13,13 @@ export const getCurrentUser = async () => {
   return user;
 }
 
+interface Integration {
+  id: string;
+  name: "INSTAGRAM";
+  token: string;
+  expiresAt: Date | null;
+}
+
 export const onBoardUser = async () => {
   const user = await getCurrentUser();
 
@@ -20,32 +27,7 @@ export const onBoardUser = async () => {
     const foundUser = await findUser(user.id);
 
     if (foundUser) {
-      if (foundUser.integrations.length > 0) {
-        const integration = foundUser.integrations[0];
-
-        if (integration.expiresAt) {
-          const today = new Date();
-          const timeLeft = integration.expiresAt.getTime() - today.getTime();
-          const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
-
-          if (daysLeft < 5) {
-            console.log("Refreshing token...");
-
-            const refresh = await refreshToken(integration.token);
-            const expireDate = new Date(today.setDate(today.getDate() + 60));
-
-            const updateToken = await updateIntegration({
-              token: refresh.access_token,
-              expire: expireDate,
-              id: integration.id,
-            });
-
-            if (!updateToken) {
-              console.log("Update token failed");
-            }
-          }
-        }
-      }
+      await handleIntegrations(foundUser.integrations);
       return {
         status: 200,
         data: {
@@ -73,6 +55,35 @@ export const onBoardUser = async () => {
     return { status: 500, message: "Internal Server Error" };
   }
 };
+
+const handleIntegrations = async (integrations: Integration[]) => {
+  if (integrations.length > 0) {
+    const integration = integrations[0];
+
+    if (integration.expiresAt) {
+      const today = new Date();
+      const timeLeft = integration.expiresAt.getTime() - today.getTime();
+      const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+
+      if (daysLeft < 5) {
+        console.log("Refreshing token...");
+
+        const refresh = await refreshToken(integration.token);
+        const expireDate = new Date(today.setDate(today.getDate() + 60));
+
+        const updateToken = await updateIntegration({
+          token: refresh.access_token,
+          expire: expireDate,
+          id: integration.id,
+        });
+
+        if (!updateToken) {
+          console.log("Update token failed");
+        }
+      }
+    }
+  }
+}
 
 export const onUserInfo = async () => {
   const user = await getCurrentUser();

@@ -10,7 +10,7 @@ import { prefetchUserData } from "@/react-query/prefetch";
 
 type Props = {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 // export const getStaticProps = async () => {
@@ -33,12 +33,14 @@ const Layout: React.FC<Props> = async ({ children, params }) => {
 
   const dehydratedState = dehydrate(queryClient);
 
+  const slug = (await params).slug;
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <div className="p-3">
-        <Sidebar slug={params.slug} />
+        <Sidebar slug={slug} />
         <div className="lg:ml-[250px] lg:pl-10 lg:py-5 flex flex-col overflow-auto">
-          <InfoBar slug={params.slug} />
+          <InfoBar slug={slug} />
           {children}
         </div>
       </div>

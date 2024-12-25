@@ -3,13 +3,13 @@
 import { createAutomation, getAutomations } from "@/actions/automations";
 import { getCurrentUser } from "@/services/userService";
 
-export const createNewAutomation = async () => {
+export const createNewAutomation = async (id?: string) => {
   const user = await getCurrentUser();
   try {
-    const create = await createAutomation({ clerkId: user.id });
-    if (create) return { status: 200, data: "Automation created" };
+    const create = await createAutomation({ clerkId: user.id, id });
+    if (create) return { status: 200, data: "Automation created", res: create };
 
-    return { status: 404, data: "Automation not found" };
+    return { status: 404, data: 'Oops! something went wrong' }
   } catch (error) {
     console.error("createNewAutomation error:",
       error,

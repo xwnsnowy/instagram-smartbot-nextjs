@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { onBoardUser } from "@/services/userService";
+import { removeAccents } from "@/lib/utils";
 
 const Page = async () => {
   const user = await onBoardUser();
@@ -17,13 +18,5 @@ const Page = async () => {
 
   return redirect("/sign-in");
 };
-
-function removeAccents(str: string): string {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D");
-}
 
 export default Page;
