@@ -22,7 +22,11 @@ const AutomationList = () => {
   const optimisticUiData = useMemo(() => {
     if (lastestVariable && lastestVariable?.variables && data) {
       const test = [lastestVariable.variables, ...data.data];
-      return { data: test };
+      // Loại bỏ các bản ghi có cùng id
+      const uniqueData = Array.from(
+        new Map(test.map((item) => [item.id, item])).values()
+      );
+      return { data: uniqueData };
     }
     return data || { data: [] };
   }, [lastestVariable, data]);
