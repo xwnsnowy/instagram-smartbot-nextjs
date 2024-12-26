@@ -1,7 +1,8 @@
 "use server";
 
-import { createAutomation, findAutomation, getAutomations } from "@/actions/automations";
+import { createAutomation, findAutomation, getAutomations, updateAutomation } from "@/actions/automations";
 import { getCurrentUser } from "@/services/userService";
+import { UpdateAutomationParams } from "@/types/automation";
 
 export const createNewAutomation = async (id?: string) => {
   const user = await getCurrentUser();
@@ -45,11 +46,28 @@ export const getAutomationInfo = async (id: string) => {
     const automation = await findAutomation(id);
     if (automation) {
       return { status: 200, data: automation };
-    } else {
-      return { status: 404, message: "Automation not found" };
     }
+    return { status: 404, message: "Automation not found" };
   } catch (error) {
     console.error("getAutomationInfo error:",
+      error,
+    );
+  } return { status: 500, message: "Internal Server Error" }
+};
+
+export const updateAutomationName = async (
+  automationId: string,
+  data: UpdateAutomationParams
+) => {
+  await getCurrentUser()
+  try {
+    const update = await updateAutomation(automationId, data)
+    if (update) {
+      return { status: 200, data: 'Automation successfully updated' }
+    }
+    return { status: 404, data: 'Oops! something went wrong' }
+  } catch (error) {
+    console.error("updateAutomationName error:",
       error,
     );
   } return { status: 500, message: "Internal Server Error" }

@@ -1,4 +1,4 @@
-import { getAllAutomations } from "@/services/automationService"
+import { getAllAutomations, getAutomationInfo } from "@/services/automationService"
 import { useQuery } from "@tanstack/react-query"
 
 // Caching Dữ Liệu:
@@ -11,6 +11,15 @@ export const useQueryAutomations = () => {
     {
       queryKey: ["user-automations"],
       queryFn: getAllAutomations,
+    }
+  )
+}
+
+export const useQueryAutomationById = (id: string) => {
+  return useQuery(
+    {
+      queryKey: ["user-automation", id],
+      queryFn: () => getAutomationInfo(id),
     }
   )
 }

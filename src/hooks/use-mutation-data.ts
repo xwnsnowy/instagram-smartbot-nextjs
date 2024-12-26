@@ -9,8 +9,33 @@ interface UseMutationDataProps {
   onSuccess?: () => void;
 }
 
+
+export const useSimpleMutation = ({
+  mutationKey,
+  mutationFn,
+  queryKey,
+  onSuccess,
+}: UseMutationDataProps) => {
+  const client = useQueryClient()
+  const { mutate, isPending } = useMutation({
+    mutationKey,
+    mutationFn,
+    onSuccess: (data) => {
+      if (onSuccess) onSuccess()
+      return toast(data?.status === 200 ? 'Success' : 'Error', {
+        description: data.data,
+      })
+    },
+    onSettled: async () => {
+      await client.invalidateQueries({ queryKey: [queryKey] })
+    },
+  })
+
+  return { mutate, isPending }
+}
+
 // Quản lý các mutation (thao tác thay đổi dữ liệu)
-export const useMutationData = ({
+export const useOptimisticMutation = ({
   mutationKey,
   mutationFn,
   queryKey,
@@ -79,8 +104,8 @@ export const useMutationDataState = (mutationKey: MutationKey) => {
     }
   })
 
-  const lastestVariable = data[data.length - 1]
-  return { lastestVariable }
+  const latestVariable = data[data.length - 1]
+  return { latestVariable }
 }
 
 // export const useMutationData = ({

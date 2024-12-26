@@ -1,7 +1,7 @@
 "use server";
 
-import { CreateUserParams, UpdateUserParams } from "@/actions/users/userTypes";
 import { prisma } from "@/lib/prisma";
+import { CreateUserParams, UpdateUserParams } from "@/types/user";
 
 export const createUser = async ({
   clerkId,

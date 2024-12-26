@@ -12,9 +12,9 @@ import React from "react";
 const AutomationList = () => {
   const { data } = useQueryAutomations();
 
-  const { lastestVariable } = useMutationDataState(["create-automation"]);
+  const { latestVariable } = useMutationDataState(["create-automation"]);
 
-  console.log(lastestVariable);
+  console.log(latestVariable);
 
   const { pathname } = usePaths();
 

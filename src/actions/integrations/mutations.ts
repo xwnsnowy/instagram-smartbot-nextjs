@@ -1,7 +1,7 @@
 "use server";
 
-import { UpdateIntegrationParams } from "@/actions/integrations/integrationTypes";
 import { prisma } from "@/lib/prisma";
+import { UpdateIntegrationParams } from "@/types/integration";
 
 export const updateIntegration = async (
   {
