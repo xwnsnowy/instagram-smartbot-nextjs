@@ -22,3 +22,24 @@ export const getAutomations = async (clerkId: string) => {
     }
   });
 };
+
+export const findAutomation = async (id: string) => {
+  return await prisma.automation.findUnique({
+    where: {
+      id
+    },
+    include: {
+      keywords: true,
+      listener: true,
+      posts: true,
+      trigger: true,
+      User: {
+        select: {
+          subscription: true,
+          integrations: true,
+        }
+      }
+    }
+  },
+  );
+};

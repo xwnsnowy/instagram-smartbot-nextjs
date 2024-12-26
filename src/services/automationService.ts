@@ -1,6 +1,6 @@
 "use server";
 
-import { createAutomation, getAutomations } from "@/actions/automations";
+import { createAutomation, findAutomation, getAutomations } from "@/actions/automations";
 import { getCurrentUser } from "@/services/userService";
 
 export const createNewAutomation = async (id?: string) => {
@@ -36,4 +36,21 @@ export const getAllAutomations = async () => {
     );
     return { status: 500, data: [] };
   }
+};
+
+export const getAutomationInfo = async (id: string) => {
+  await getCurrentUser();
+
+  try {
+    const automation = await findAutomation(id);
+    if (automation) {
+      return { status: 200, data: automation };
+    } else {
+      return { status: 404, message: "Automation not found" };
+    }
+  } catch (error) {
+    console.error("getAutomationInfo error:",
+      error,
+    );
+  } return { status: 500, message: "Internal Server Error" }
 };
