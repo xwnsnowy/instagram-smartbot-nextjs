@@ -9,20 +9,28 @@ import { v4 } from "uuid";
 
 const CreateAutomation = () => {
   const mutationId = useMemo(() => v4(), []);
-
   const { mutate, isPending } = useCreateAutomation(mutationId);
+
+  const handleCreateAutomation = () => {
+    mutate(
+      {
+        name: "Untitled",
+        id: mutationId,
+        createdAt: new Date(),
+        keywords: [],
+      },
+      {
+        onError: (error) => {
+          console.error("Failed to create automation:", error);
+        },
+      }
+    );
+  };
 
   return (
     <Button
       className="lg:px-10 py-6 bg-gradient-to-br from-[#3352CC] via-[#CC3BD4] to-[#1C2D70] hover:opacity-80 text-white rounded-full font-medium"
-      onClick={() =>
-        mutate({
-          name: "Untitlled",
-          id: mutationId,
-          createdAt: new Date(),
-          keywords: [],
-        })
-      }
+      onClick={handleCreateAutomation}
     >
       <Loader state={isPending}>
         <AutomationDuoToneWhite />

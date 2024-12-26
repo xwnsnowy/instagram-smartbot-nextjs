@@ -9,32 +9,61 @@ interface UseMutationDataProps {
   onSuccess?: () => void;
 }
 
-//quản lý các mutation (thao tác thay đổi dữ liệu)
+// Quản lý các mutation (thao tác thay đổi dữ liệu)
 export const useMutationData = ({
   mutationKey,
   mutationFn,
   queryKey,
   onSuccess,
 }: UseMutationDataProps) => {
-  //query client giúp truy cập và quản lý cache của React Query.
+  // QueryClient giúp truy cập và quản lý cache của React Query
   const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationKey,
     mutationFn,
-    onSuccess: (data) => {
-      if (onSuccess) onSuccess()
-      return toast(data?.status === 200 ? "Success" : "Error", {
-        description: data?.message,
-      })
-    },
-    // onSettled được gọi sau khi mutation kết thúc (dù thành công hay thất bại). Trong hàm này, queryClient.invalidateQueries sẽ làm mới các query được xác định bởi queryKey
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({ queryKey: [queryKey] });
-    }
-  })
+    // Thực hiện optimistic updates
+    onMutate: async (newData) => {
+      // Hủy các query liên quan để tránh xung đột
+      await queryClient.cancelQueries({ queryKey: [queryKey] });
 
-  return { mutate, isPending }
-}
+      // Lưu lại dữ liệu cũ trong trường hợp rollback
+      const previousData = queryClient.getQueryData([queryKey]);
+
+      // Cập nhật dữ liệu lạc quan
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData([queryKey], (oldData: any) => {
+        if (!oldData?.data) return { data: [newData] }; // Nếu cache rỗng, thêm dữ liệu mới
+        return {
+          ...oldData, // Giữ lại các metadata khác
+          data: [newData, ...oldData.data], // Chèn dữ liệu mới vào đầu danh sách
+        };
+      });
+
+      // Trả lại dữ liệu cũ để sử dụng nếu cần rollback
+      return { previousData };
+    },
+    onError: (err, newData, context) => {
+      // Khôi phục dữ liệu cũ nếu mutation thất bại
+      if (context?.previousData) {
+        queryClient.setQueryData([queryKey], context.previousData);
+      }
+      toast.error("Mutation failed");
+    },
+    onSuccess: (data) => {
+      if (onSuccess) onSuccess();
+      toast.success(data?.status === 200 ? "Success" : "Error", {
+        description: data?.message,
+      });
+    },
+    // Làm mới query sau khi mutation hoàn tất
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+    },
+  });
+
+  return { mutate, isPending };
+};
 
 export const useMutationDataState = (mutationKey: MutationKey) => {
   const data = useMutationState({

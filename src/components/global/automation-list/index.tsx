@@ -7,7 +7,7 @@ import { usePaths } from "@/hooks/use-paths";
 import { useQueryAutomations } from "@/hooks/use-queries";
 import { cn, getMonth } from "@/lib/utils";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React from "react";
 
 const AutomationList = () => {
   const { data } = useQueryAutomations();
@@ -19,17 +19,16 @@ const AutomationList = () => {
   const { pathname } = usePaths();
 
   //Khi một mutation (hoạt động tạo mới một tự động hóa) diễn ra, giao diện người dùng sẽ được cập nhật ngay lập tức với dữ liệu mới nhất từ mutation đó, ngay cả khi dữ liệu này chưa thực sự được xác nhận từ server
-  const optimisticUiData = useMemo(() => {
-    if (lastestVariable && lastestVariable?.variables && data) {
-      const test = [lastestVariable.variables, ...data.data];
-      // Loại bỏ các bản ghi có cùng id
-      const uniqueData = Array.from(
-        new Map(test.map((item) => [item.id, item])).values()
-      );
-      return { data: uniqueData };
-    }
-    return data || { data: [] };
-  }, [lastestVariable, data]);
+  // const optimisticUiData = useMemo(() => {
+  //   if (lastestVariable?.variables && data?.data) {
+  //     const combinedData = [
+  //       lastestVariable.variables,
+  //       ...data.data.filter((item) => item.id !== lastestVariable.variables.id),
+  //     ];
+  //     return { data: combinedData };
+  //   }
+  //   return data || { data: [] };
+  // }, [lastestVariable, data]);
 
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
@@ -42,7 +41,7 @@ const AutomationList = () => {
 
   return (
     <div className="flex flex-col gap-y-3">
-      {optimisticUiData.data.map((automation) => (
+      {data.data.map((automation) => (
         <Link
           href={`${pathname}/${automation.id}`}
           className="bg-[#1D1D1D] hover:opacity-80 transition duration-100 rounded-xl p-5 border-[1px] radial--gradient--automations flex border-[#545454]"
