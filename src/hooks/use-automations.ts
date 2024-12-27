@@ -13,6 +13,7 @@ export const useCreateAutomation = (id?: string) => {
 };
 
 export const useEditAutomation = (automationId: string) => {
+
   const [edit, setEdit] = useState(false);
   //inputRef: Tham chiếu đến phần tử input trong DOM. Ban đầu nó được khởi tạo với giá trị null. Khi phần tử input được gắn (mounted), inputRef.current sẽ chứa phần tử DOM đó.
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +27,9 @@ export const useEditAutomation = (automationId: string) => {
         name: data.name
       }),
     queryKey: 'automation-info',
-    onSuccess: () => disableEdit()
+    onSuccess: () => {
+      disableEdit();
+    },
   });
 
   const handleClickOutside = useCallback((event: MouseEvent) => {

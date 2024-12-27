@@ -2,7 +2,6 @@
 import GradientButton from "@/components/global/button-custom/GradientButton";
 import CreateAutomation from "@/components/global/create-automation";
 import { Button } from "@/components/ui/button";
-import { useMutationDataState } from "@/hooks/use-mutation-data";
 import { usePaths } from "@/hooks/use-paths";
 import { useQueryAutomations } from "@/hooks/use-queries";
 import { cn, getMonth } from "@/lib/utils";
@@ -11,10 +10,6 @@ import React from "react";
 
 const AutomationList = () => {
   const { data } = useQueryAutomations();
-
-  const { latestVariable } = useMutationDataState(["create-automation"]);
-
-  console.log(latestVariable);
 
   const { pathname } = usePaths();
 

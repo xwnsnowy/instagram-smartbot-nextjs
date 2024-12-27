@@ -4,11 +4,11 @@ import Loader from "@/components/global/loader";
 import { Button } from "@/components/ui/button";
 import { useCreateAutomation } from "@/hooks/use-automations";
 import { AutomationDuoToneWhite } from "@/icons";
-import { useMemo } from "react";
 import { v4 } from "uuid";
 
 const CreateAutomation = () => {
-  const mutationId = useMemo(() => v4(), []);
+  const mutationId = v4();
+
   const { mutate, isPending } = useCreateAutomation(mutationId);
 
   const handleCreateAutomation = () => {

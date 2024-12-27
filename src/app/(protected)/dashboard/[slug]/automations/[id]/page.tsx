@@ -3,15 +3,20 @@ import Trigger from "@/components/global/bread-crumbs/automations/trigger";
 import { Warning } from "@/icons";
 import { prefetchUserAutomation } from "@/react-query/prefetch";
 import { getAutomationInfo } from "@/services/automationService";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import React from "react";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: Props) {
-  const info = await getAutomationInfo(params.id);
+  const id = (await params).id;
+  const info = await getAutomationInfo(id);
   return {
     title: info.data?.name,
   };
@@ -19,18 +24,19 @@ export async function generateMetadata({ params }: Props) {
 
 const Page = async ({ params }: Props) => {
   const query = new QueryClient();
-  await prefetchUserAutomation(query, params.id);
+  const id = (await params).id;
+  await prefetchUserAutomation(query, id);
 
   return (
     <HydrationBoundary state={dehydrate(query)}>
       <div className="flex flex-col items-center gap-y-20">
-        <AutomationsBreadCrumb id={params.id} />
+        <AutomationsBreadCrumb id={id} />
         <div className="w-full lg:w-10/12 xl:w-6/12 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3">
           <div className="flex gap-x-2">
             <Warning />
             When...
           </div>
-          <Trigger id={params.id} />
+          <Trigger id={id} />
         </div>
       </div>
     </HydrationBoundary>

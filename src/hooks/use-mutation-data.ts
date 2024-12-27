@@ -9,14 +9,13 @@ interface UseMutationDataProps {
   onSuccess?: () => void;
 }
 
-
 export const useSimpleMutation = ({
   mutationKey,
   mutationFn,
   queryKey,
   onSuccess,
 }: UseMutationDataProps) => {
-  const client = useQueryClient()
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationKey,
     mutationFn,
@@ -27,7 +26,7 @@ export const useSimpleMutation = ({
       })
     },
     onSettled: async () => {
-      await client.invalidateQueries({ queryKey: [queryKey] })
+      await queryClient.invalidateQueries({ queryKey: [queryKey] })
     },
   })
 
@@ -55,7 +54,7 @@ export const useOptimisticMutation = ({
       // Lưu lại dữ liệu cũ trong trường hợp rollback
       const previousData = queryClient.getQueryData([queryKey]);
 
-      // Cập nhật dữ liệu lạc quan
+      // Cập nhật cache với dữ liệu mới ngay lập tức mà không chờ phản hồi từ server
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData([queryKey], (oldData: any) => {
         if (!oldData?.data) return { data: [newData] }; // Nếu cache rỗng, thêm dữ liệu mới
