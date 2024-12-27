@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "sonner";
 import ReactQueryProvider from "@/providers/react-query-provider";
+import ReduxProvider from "@/providers/redux-provider";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -32,7 +33,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ReactQueryProvider>{children}</ReactQueryProvider>
+            <ReduxProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+            </ReduxProvider>
             <Toaster />
           </ThemeProvider>
         </body>

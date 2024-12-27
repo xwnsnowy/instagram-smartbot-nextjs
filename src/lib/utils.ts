@@ -1,3 +1,4 @@
+import { TriggerType } from "@/types/trigger";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -35,4 +36,16 @@ export const getMonth = (month: number) => {
   }
 
   return months[month - 1]
+}
+
+export const duplicateValidation = (array: TriggerType[], element: TriggerType): TriggerType[] => {
+  // Kiểm tra xem phần tử (element) có tồn tại trong mảng (array) hay không
+  if (!array.find((existingElement) => existingElement === element)) {
+    array.push(element);
+    return array;
+  } else {
+    // Nếu tồn tại, loại bỏ phần tử đó ra khỏi mảng
+    array = array.filter((existingElement) => existingElement !== element);
+    return array;
+  }
 }
