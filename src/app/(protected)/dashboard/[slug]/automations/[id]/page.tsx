@@ -1,5 +1,5 @@
+import Trigger from "@/components/global/automations/trigger";
 import AutomationsBreadCrumb from "@/components/global/bread-crumbs/automations";
-import Trigger from "@/components/global/bread-crumbs/automations/trigger";
 import { Warning } from "@/icons";
 import { prefetchUserAutomation } from "@/react-query/prefetch";
 import { getAutomationInfo } from "@/services/automationService";

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import AutomationReducer from '@/redux/slices/automation';

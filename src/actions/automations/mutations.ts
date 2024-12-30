@@ -31,3 +31,52 @@ export const updateAutomation = async (
     },
   })
 }
+
+export const addListener = async (
+  automationId: string,
+  listener: 'SMARTAI' | 'MESSAGE',
+  prompt: string,
+  reply?: string
+) => {
+  return await prisma.automation.update({
+    where: {
+      id: automationId,
+    },
+    data: {
+      listener: {
+        create: {
+          listener,
+          prompt,
+          commentReply: reply,
+        },
+      },
+    },
+  })
+}
+
+export const addTrigger = async (automationId: string, trigger: string[]) => {
+  if (trigger.length === 2) {
+    return await prisma.automation.update({
+      where: { id: automationId },
+      data: {
+        trigger: {
+          createMany: {
+            data: [{ type: trigger[0] }, { type: trigger[1] }],
+          },
+        },
+      },
+    })
+  }
+  return await prisma.automation.update({
+    where: {
+      id: automationId,
+    },
+    data: {
+      trigger: {
+        create: {
+          type: trigger[0],
+        },
+      },
+    },
+  })
+}

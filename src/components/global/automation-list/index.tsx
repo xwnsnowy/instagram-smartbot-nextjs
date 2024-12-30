@@ -1,4 +1,5 @@
 "use client";
+
 import GradientButton from "@/components/global/button-custom/GradientButton";
 import CreateAutomation from "@/components/global/create-automation";
 import { Button } from "@/components/ui/button";
