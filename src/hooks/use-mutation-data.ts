@@ -25,6 +25,7 @@ export const useSimpleMutation = ({
         description: data.data,
       })
     },
+    onError: (error) => { return toast('Error', { description: error.message }); },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: [queryKey] })
     },

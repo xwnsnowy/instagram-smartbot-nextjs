@@ -11,11 +11,13 @@ type LoaderProps = {
 
 const Loader = ({ children, state, className, color }: LoaderProps) => {
   return state ? (
-    <div className={cn(className)}>
+    <div className={cn(className)} role="alert" aria-busy="true">
       <Spinner color={color} />
     </div>
   ) : (
-    children
+    <div role="alert" aria-busy="false" className="flex gap-2 items-center">
+      {children}
+    </div>
   );
 };
 

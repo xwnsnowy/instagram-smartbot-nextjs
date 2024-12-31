@@ -32,9 +32,9 @@ const Page = async ({ params }: Props) => {
       <div className="flex flex-col items-center gap-y-20">
         <AutomationsBreadCrumb id={id} />
         <div className="w-full lg:w-10/12 xl:w-6/12 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3">
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-2 items-center py-2 pl-2">
             <Warning />
-            When...
+            <span>When...</span>
           </div>
           <Trigger id={id} />
         </div>

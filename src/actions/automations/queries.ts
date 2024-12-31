@@ -43,3 +43,9 @@ export const findAutomation = async (id: string) => {
   },
   );
 };
+
+export const deleteKeywordQuery = async (id: string) => {
+  return await prisma.keyword.delete({
+    where: { id },
+  })
+}

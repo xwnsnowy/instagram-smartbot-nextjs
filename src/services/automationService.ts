@@ -1,6 +1,6 @@
 "use server";
 
-import { addListener, addTrigger, createAutomation, findAutomation, getAutomations, updateAutomation } from "@/actions/automations";
+import { addKeyWord, addListener, addTrigger, createAutomation, deleteKeywordQuery, findAutomation, getAutomations, updateAutomation } from "@/actions/automations";
 import { getCurrentUser } from "@/services/userService";
 import { UpdateAutomationParams } from "@/types/automation";
 
@@ -100,6 +100,40 @@ export const saveTrigger = async (automationId: string, trigger: string[]) => {
     return { status: 404, data: 'Cannot save trigger' }
   } catch (error) {
     console.error("saveListener error:",
+      error,
+    );
+    return { status: 500, data: 'Oops! something went wrong' }
+  }
+}
+
+export const saveKeyword = async (automationId: string, keyword: string) => {
+  await getCurrentUser()
+  try {
+    const create = await addKeyWord(automationId, keyword)
+
+    if (create) return { status: 200, data: 'Keyword added successfully' }
+
+    return { status: 404, data: 'Cannot add this keyword' }
+  } catch (error) {
+    console.error("saveKeyword error:",
+      error,
+    );
+    return { status: 500, data: 'Oops! something went wrong' }
+  }
+}
+
+export const deleteKeyword = async (id: string) => {
+  await getCurrentUser();
+  try {
+    const deleted = await deleteKeywordQuery(id)
+    if (deleted)
+      return {
+        status: 200,
+        data: 'Keyword deleted',
+      }
+    return { status: 404, data: 'Keyword not found' }
+  } catch (error) {
+    console.error("deleteKeyword error:",
       error,
     );
     return { status: 500, data: 'Oops! something went wrong' }

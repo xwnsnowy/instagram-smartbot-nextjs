@@ -8,17 +8,20 @@ import TriggerButton from "@/components/global/automations/trigger-button";
 import { AUTOMATION_TRIGGERS } from "@/constants/automation";
 import { cn } from "@/lib/utils";
 import { useTriggers } from "@/hooks/use-automations";
+import Keywords from "@/components/global/automations/trigger/keywords";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/global/loader";
 
 type Props = {
   id: string;
 };
 const Trigger = ({ id }: Props) => {
-  const { types, onSetTrigger } = useTriggers(id);
+  const { types, onSetTrigger, onSaveTrigger, isPending } = useTriggers(id);
   const { data } = useQueryAutomationById(id);
 
   if (data?.data && data?.data?.trigger.length > 0) {
     return (
-      <div className="flex flex-col ga-y-6 items-center">
+      <div className="flex flex-col gap-y-6 items-center">
         <ActiveTrigger
           type={data.data.trigger[0].type}
           keywords={data.data.keywords}
@@ -67,6 +70,14 @@ const Trigger = ({ id }: Props) => {
             <p className="text-sm font-light">{trigger.description}</p>
           </div>
         ))}
+        <Keywords id={id} />
+        <Button
+          onClick={onSaveTrigger}
+          disabled={types?.length === 0}
+          className="bg-gradient-to-br from-[#3352CC] font-medium text-white to-[#1C2D70]"
+        >
+          <Loader state={isPending}>Create Trigger</Loader>
+        </Button>
       </div>
     </TriggerButton>
   );

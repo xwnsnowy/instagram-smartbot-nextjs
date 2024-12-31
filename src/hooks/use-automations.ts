@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { useOptimisticMutation, useSimpleMutation } from '@/hooks/use-mutation-data';
-import { createNewAutomation, saveListener, saveTrigger, updateAutomationName } from '@/services/automationService';
+import { createNewAutomation, deleteKeyword, saveKeyword, saveListener, saveTrigger, updateAutomationName } from '@/services/automationService';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useZodForm from '@/hooks/use-zod-form';
 import { AppDispatch, useAppSelector } from '@/redux/store';
@@ -101,6 +101,7 @@ export const useListener = (id: string) => {
 export const useTriggers = (id: string) => {
   const types = useAppSelector((state) => state.AutomationReducer.trigger?.types)
 
+  // useDispatch là một hook để gửi hành động đến Redux store.
   const dispatch: AppDispatch = useDispatch();
 
   const onSetTrigger = (type: 'COMMENT' | 'DM') =>
@@ -115,5 +116,38 @@ export const useTriggers = (id: string) => {
   )
 
   const onSaveTrigger = () => mutate({ types })
+
   return { types, onSetTrigger, onSaveTrigger, isPending }
+}
+
+export const useKeywords = (id: string) => {
+  const [keyword, setKeyword] = useState('');
+  const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setKeyword(e.target.value);
+
+  const { mutate } = useSimpleMutation(
+    {
+      mutationKey: ['add-keyword'],
+      mutationFn: (data: { keyword: string }) => saveKeyword(id, data.keyword),
+      queryKey: 'automation-info',
+      onSuccess: () => setKeyword('')
+    }
+  )
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      mutate({ keyword })
+      setKeyword('')
+    }
+  }
+
+  const { mutate: deleteMutation } = useSimpleMutation(
+    {
+      mutationKey: ['delete-keyword'],
+      mutationFn: (data: { id: string }) => deleteKeyword(data.id),
+      queryKey: 'automation-info'
+    }
+  )
+
+  return { keyword, onValueChange, onKeyPress, deleteMutation }
 }

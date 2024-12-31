@@ -80,3 +80,18 @@ export const addTrigger = async (automationId: string, trigger: string[]) => {
     },
   })
 }
+
+export const addKeyWord = async (automationId: string, keyword: string) => {
+  return await prisma.automation.update({
+    where: {
+      id: automationId,
+    },
+    data: {
+      keywords: {
+        create: {
+          word: keyword,
+        },
+      },
+    },
+  })
+}
