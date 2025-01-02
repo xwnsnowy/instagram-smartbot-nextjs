@@ -18,7 +18,7 @@ export const useQueryAutomations = () => {
 export const useQueryAutomationById = (id: string) => {
   return useQuery(
     {
-      queryKey: ["user-automation", id],
+      queryKey: ["automation-info", id],
       queryFn: () => getAutomationInfo(id),
     }
   )

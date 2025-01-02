@@ -179,3 +179,19 @@ export const savePosts = async (
     return { status: 500, data: 'Oops! something went wrong' }
   }
 }
+
+export const activateAutomation = async (id: string, state: boolean) => {
+  await getCurrentUser()
+  try {
+    const update = await updateAutomation(id, { active: state })
+    if (update)
+      return {
+        status: 200,
+        data: `Automation ${state ? 'activated' : 'disabled'}`,
+      }
+    return { status: 404, data: 'Automation not found' }
+  } catch (error) {
+    console.log('🔴 server side Error in activateAutomation ', error)
+    return { status: 500, data: 'Oops! something went wrong' }
+  }
+}
