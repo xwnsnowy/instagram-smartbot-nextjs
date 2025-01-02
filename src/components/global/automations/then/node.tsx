@@ -1,8 +1,9 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { useQueryAutomationById } from "@/hooks/use-queries";
 import { PlaneBlue, SmartAi, Warning } from "@/icons";
 import React from "react";
+import PostButton from "../post";
+import { useQueryAutomationById } from "@/hooks/use-queries";
 
 type Props = {
   id: string;
@@ -48,9 +49,8 @@ const ThenNode = ({ id }: Props) => {
       {data.data.posts.length > 0 ? (
         <></>
       ) : commentTrigger ? (
-        <></>
+        <PostButton id={id} />
       ) : (
-        // <PostButton id={id} />
         <></>
       )}
     </div>

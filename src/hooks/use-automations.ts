@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { useOptimisticMutation, useSimpleMutation } from '@/hooks/use-mutation-data';
-import { createNewAutomation, deleteKeyword, saveKeyword, saveListener, saveTrigger, updateAutomationName } from '@/services/automationService';
+import { createNewAutomation, deleteKeyword, saveKeyword, saveListener, savePosts, saveTrigger, updateAutomationName } from '@/services/automationService';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useZodForm from '@/hooks/use-zod-form';
 import { AppDispatch, useAppSelector } from '@/redux/store';
@@ -150,4 +150,40 @@ export const useKeywords = (id: string) => {
   )
 
   return { keyword, onValueChange, onKeyPress, deleteMutation }
+}
+
+export const useAutomationPosts = (id: string) => {
+  const [posts, setPosts] = useState<
+    {
+      postid: string
+      caption?: string
+      media: string
+      mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
+    }[]
+  >([])
+
+  const onSelectPost = (post: {
+    postid: string
+    caption?: string
+    media: string
+    mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
+  }) => {
+    setPosts((prevItems) => {
+      if (prevItems.find((p) => p.postid === post.postid)) {
+        return prevItems.filter((item) => item.postid !== post.postid)
+      } else {
+        return [...prevItems, post]
+      }
+    })
+  }
+
+  const { mutate, isPending } = useSimpleMutation(
+    {
+      mutationKey: ['attach-posts'],
+      mutationFn: () => savePosts(id, posts),
+      queryKey: 'automation-info',
+      onSuccess: () => setPosts([])
+    }
+  )
+  return { posts, onSelectPost, mutate, isPending }
 }

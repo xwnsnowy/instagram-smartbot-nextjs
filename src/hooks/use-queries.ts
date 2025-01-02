@@ -1,4 +1,4 @@
-import { getAllAutomations, getAutomationInfo } from "@/services/automationService"
+import { getAllAutomations, getAutomationInfo, getProfilePosts } from "@/services/automationService"
 import { useQuery } from "@tanstack/react-query"
 
 // Caching Dữ Liệu:
@@ -22,4 +22,11 @@ export const useQueryAutomationById = (id: string) => {
       queryFn: () => getAutomationInfo(id),
     }
   )
+}
+
+export const useQueryAutomationPosts = () => {
+  return useQuery({
+    queryKey: ['instagram-media'],
+    queryFn: async () => await getProfilePosts(),
+  })
 }
