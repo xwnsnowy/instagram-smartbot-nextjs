@@ -9,7 +9,7 @@ import React from "react";
 
 type Props = {
   currentPage: string;
-  slug: string;
+  slug?: string;
 };
 
 const SidebarContent = ({ currentPage, slug }: Props) => {

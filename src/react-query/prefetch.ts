@@ -25,3 +25,4 @@ export const prefetchUserAutomation = async (
 ) => {
   return await prefetch(client, () => getAutomationInfo(automationId), "automation-info");
 }
+

@@ -1,4 +1,5 @@
 import { getAllAutomations, getAutomationInfo, getProfilePosts } from "@/services/automationService"
+import { onUserInfo } from "@/services/userService"
 import { useQuery } from "@tanstack/react-query"
 
 // Caching Dữ Liệu:
@@ -22,6 +23,13 @@ export const useQueryAutomationById = (id: string) => {
       queryFn: () => getAutomationInfo(id),
     }
   )
+}
+
+export const useQueryUser = () => {
+  return useQuery({
+    queryKey: ["user-profile"],
+    queryFn: onUserInfo
+  })
 }
 
 export const useQueryAutomationPosts = () => {

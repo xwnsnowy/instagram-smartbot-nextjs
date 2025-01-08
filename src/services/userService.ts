@@ -1,8 +1,9 @@
 "use server";
 
 import { updateIntegration } from "@/actions/integrations"
-import { createUser, findUser } from "@/actions/users"
+import { createUser, findUser, updateSubscription } from "@/actions/users"
 import { refreshToken } from "@/lib/fetch"
+import { stripe } from "@/lib/stripe";
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 
@@ -96,6 +97,31 @@ export const onUserInfo = async () => {
     console.error("onUserInfo error:", error, {
       user,
     });
+    return { status: 500, message: "Internal Server Error" };
+  }
+}
+
+export const onSubscribe = async (session_id: string) => {
+  const user = await getCurrentUser();
+  try {
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (session) {
+      const subcribed = await updateSubscription(user.id, {
+        customerId: session.customer as string,
+        plan: "PRO",
+      });
+
+      if (subcribed) return { status: 200, data: subcribed }
+      return { status: 401 }
+    }
+
+    return { status: 404 };
+  } catch (error) {
+    console.error("onSubscribe error:", error, {
+      user,
+    });
+
     return { status: 500, message: "Internal Server Error" };
   }
 }

@@ -1,11 +1,14 @@
 "use client";
 
 import ActivateAutomationButton from "@/components/global/button-custom/ActiveAutomationButton";
+import SheetCustom from "@/components/global/sheet-custom";
+import SidebarContent from "@/components/global/sidebar/SidebarContent";
 import { Input } from "@/components/ui/input";
 import { useEditAutomation } from "@/hooks/use-automations";
 import { useMutationDataState } from "@/hooks/use-mutation-data";
+import { usePaths } from "@/hooks/use-paths";
 import { useQueryAutomationById } from "@/hooks/use-queries";
-import { ChevronRight, PencilIcon } from "lucide-react";
+import { ChevronRight, Menu, PencilIcon } from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -13,6 +16,8 @@ type Props = {
 };
 
 const AutomationsBreadCrumb = ({ id }: Props) => {
+  const { page } = usePaths();
+
   const { data } = useQueryAutomationById(id);
 
   const { edit, enableEdit, inputRef, isPending } = useEditAutomation(id);
@@ -22,6 +27,11 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
   return (
     <div className="rounded-full w-full p-5 bg-[#29292c1a] flex items-center">
       <div className="flex items-center gap-x-3 min-w-0">
+        <div className="lg:hidden flex items-center flex-1 gap-x-2">
+          <SheetCustom trigger={<Menu />} className="lg:hidden" side="left">
+            <SidebarContent currentPage={page} />
+          </SheetCustom>
+        </div>
         <p className="text-[#9B9CA0] truncate">Automations</p>
         <ChevronRight color="#9B9CA0" className="flex-shrink-0" />
         <span className="flex gap-x-3 items-center min-w-0">

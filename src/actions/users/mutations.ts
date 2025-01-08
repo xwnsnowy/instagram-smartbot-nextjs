@@ -43,3 +43,26 @@ export const updateUser = async ({
     throw new Error("Could not update user");
   }
 }
+
+export const updateSubscription = async (
+  clerkId: string,
+  props: {
+    customerId: string,
+    plan?: "PRO" | "FREE"
+  }
+) => {
+  return await prisma.user.update({
+    where: {
+      clerkId,
+    },
+    data: {
+      subscription: {
+        update: {
+          data: {
+            ...props,
+          },
+        },
+      },
+    }
+  })
+}
