@@ -18,3 +18,29 @@ export const updateIntegration = async (
     }
   });
 };
+
+export const createIntegration = async (
+  clerkId: string,
+  token: string,
+  expire: Date,
+  igId?: string
+) => {
+  return await prisma.user.update({
+    where: {
+      clerkId,
+    },
+    data: {
+      integrations: {
+        create: {
+          token,
+          expiresAt: expire,
+          instagramId: igId,
+        },
+      },
+    },
+    select: {
+      firstname: true,
+      lastname: true,
+    },
+  })
+}
